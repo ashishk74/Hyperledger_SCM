@@ -1,0 +1,42 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: reliance-network.com
+    Specs:
+      - Hostname: orderer
+PeerOrgs:
+  - Name: Infra
+    Domain: infra.reliance-network.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Power
+    Domain: power.reliance-network.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Comm
+    Domain: comm.reliance-network.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Entt
+    Domain: entt.reliance-network.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Capital
+    Domain: capital.reliance-network.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+

@@ -1,0 +1,138 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * Drafted by Ashish Kumar ( +91-9876061725)
+ */
+
+namespace org.Reliance.trackingasset
+
+abstract participant person identified by id {   
+  o String id
+  o String emailid
+  o String address
+  o Double balance
+}
+
+participant Importer extends person{
+}
+
+participant Exporter extends person{
+}
+
+participant Shipper extends person{
+}
+
+enum AssetType {
+  o Medicine
+  o Fuel
+  o Trucks
+  o Wires
+  o Tables
+  o Laptops
+  o Chairs
+}
+
+enum ShipmentStatus {
+  o Created
+  o InTransit
+  o Arrived
+}
+
+enum CompassDirection {
+  o N
+  o S
+  o E
+  o W
+}
+
+asset Contract identified by contractId{
+  o String contractId
+  --> Exporter exporter
+  --> Importer importer
+  --> Shipper shipper
+  o DateTime expectedArrivalTime
+  o Double unitPrice
+  o Double minTemp
+  o Double maxTemp
+  o Double minPenalityFact
+  o Double maxPenalityFact
+  o Double maxAccel
+}
+
+asset ShipmentAsset identified by shipmentId{
+  o String shipmentId
+  o AssetType assettype
+  o ShipmentStatus shipmentstatus
+  o Long unitCount
+  --> Contract contract
+  o String[] tempReadings
+  o String[] accReadings
+  o String[] gpsReadings
+}
+
+abstract transaction shipmentTrans{
+  --> ShipmentAsset shipmentTrans
+}
+
+transaction accelerationreading extends shipmentTrans{
+  o Double accelX
+  o Double accelY
+  o Double accelZ
+  o String latitude
+  o String longitude
+  o String now optional
+}
+
+transaction temparaturereading extends shipmentTrans{
+  o Double temp
+  o String latitude
+  o String longitude
+  o String now optional
+}
+
+transaction gpsreading extends shipmentTrans{
+  o String latitude
+  o String longitude
+  o CompassDirection latDir
+  o CompassDirection longDir
+  o String gpsDate optional
+  o String gpsTime optional
+}
+
+transaction shipmentreceived{
+  --> ShipmentAsset shipmentReceived
+}
+
+event temparaturethreshold{
+  o Double temp
+  o String message
+  o String latitude
+  o String longitude
+  o String now
+  --> ShipmentAsset shipmentTempThres
+}
+
+event accelarationthreshold{
+  o Double accelX
+  o Double accelY
+  o Double accelZ
+  o String message
+  o String latitude
+  o String longitude
+  o String now
+  --> ShipmentAsset shipmentAccelThres
+}
+
+event shipmentPort{
+  o String message
+  --> ShipmentAsset shipmentPort
+}
